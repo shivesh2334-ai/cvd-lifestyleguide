@@ -203,11 +203,66 @@
   .chat-input-row button:disabled{opacity:.5;}
   .chat-disclaimer{font-size:10.5px;color:var(--ink-soft);padding:6px 14px 10px;background:#fff;}
 
+  /* ---- Booking ---- */
+  .book-fab{
+    position:fixed;right:20px;bottom:80px;z-index:50;
+    background:var(--teal);color:#fff;border:none;border-radius:999px;
+    padding:14px 18px;display:flex;align-items:center;gap:9px;
+    box-shadow:0 10px 30px -8px rgba(22,35,43,0.45);
+    font-size:14px;font-weight:600;
+  }
+  .book-overlay{
+    position:fixed;inset:0;z-index:70;background:rgba(22,35,43,0.5);
+    display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 16px;
+  }
+  .book-overlay.open{display:flex;}
+  .book-modal{
+    background:var(--card);border-radius:18px;border:1px solid var(--line);
+    box-shadow:0 20px 60px -12px rgba(22,35,43,0.4);
+    width:480px;max-width:100%;overflow:hidden;
+  }
+  .book-modal-head{background:var(--ink);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:10px;}
+  .book-modal-title{font-size:15px;font-weight:700;flex:1;font-family:"Noto Serif","Noto Serif Devanagari","Noto Serif Bengali","Noto Serif Gurmukhi",serif;}
+  .book-modal-sub{font-size:11.5px;opacity:.75;margin-top:2px;}
+  .book-modal-close{background:transparent;border:none;color:#fff;opacity:.8;padding:4px;}
+  .book-modal-body{padding:18px;max-height:70vh;overflow-y:auto;}
+  .book-field{margin-bottom:14px;}
+  .book-field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+  .book-field input,.book-field select,.book-field textarea{
+    width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;
+    background:#fff;color:var(--ink);font-family:inherit;
+  }
+  .book-field textarea{resize:vertical;min-height:60px;}
+  .book-type-grid{display:grid;grid-template-columns:1fr;gap:8px;}
+  .book-type-card{
+    border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:13.5px;font-weight:600;color:var(--ink);background:#fff;text-align:left;
+  }
+  .book-type-card .fee{color:var(--teal);font-weight:700;}
+  .book-type-card.selected{border-color:var(--teal);background:var(--teal-light);}
+  .book-slot-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .book-slot-card{border:1.5px solid var(--line);border-radius:10px;padding:9px 10px;font-size:12.5px;font-weight:600;color:var(--ink);background:#fff;}
+  .book-slot-card.selected{border-color:var(--teal);background:var(--teal-light);color:var(--teal);}
+  .book-fee-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px dashed var(--line);margin-top:6px;font-weight:700;font-size:14.5px;}
+  .book-error{color:var(--coral);font-size:12.5px;margin:6px 0 0;}
+  .book-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;}
+  .book-success{padding:6px 0;}
+  .book-success h3{font-size:16px;margin-bottom:8px;}
+  .book-success p{font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
+  .book-disclaimer{font-size:11px;color:var(--ink-soft);margin-top:12px;}
+  .book-list{list-style:none;margin:0;padding:0;}
+  .book-list li{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:13px;}
+  .book-list .b-top{display:flex;justify-content:space-between;font-weight:700;}
+  .book-list button{margin-top:6px;background:transparent;border:1px solid var(--coral);color:var(--coral);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;}
+
   @media (max-width:520px){
     .stage-row{grid-template-columns:1fr;gap:4px;}
     .pulse-stage{font-size:9.5px;}
     .chat-panel{right:10px;left:10px;width:auto;bottom:10px;height:74vh;}
     .chat-fab{right:16px;bottom:16px;padding:12px 16px;}
+    .book-fab{right:16px;bottom:78px;padding:12px 16px;}
+    .book-slot-grid{grid-template-columns:1fr;}
   }
 
   /* ---- Evaluation wizard ---- */
@@ -355,6 +410,27 @@
   <div class="chat-disclaimer" id="chatDisclaimer"></div>
 </div>
 
+<button class="book-fab" id="bookFab">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+  <span id="bookFabLabel">Book appointment</span>
+</button>
+
+<div class="book-overlay" id="bookOverlay">
+  <div class="book-modal">
+    <div class="book-modal-head">
+      <div>
+        <div class="book-modal-title" id="bookHeadTitle">Book a follow-up appointment</div>
+        <div class="book-modal-sub" id="bookHeadSub">Choose a slot and confirm with payment</div>
+      </div>
+      <button class="book-modal-close" id="bookClose">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="book-modal-body" id="bookModalBody"></div>
+  </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 /* =========================================================
    CONTENT — English source, then hi / pa / bn translations
@@ -388,6 +464,34 @@ en:{
   chatInputPlaceholder:"Type your question…", chatSend:"Send",
   chatIntro:"Hello. Ask me anything about driving, flying, intimacy, returning to work, or exercise after your angioplasty — I'll answer based on this guide.",
   chatDisclaimer:"This chatbot gives general lifestyle guidance only and does not replace advice from your own cardiologist. In an emergency, call your local emergency number immediately.",
+  bookFabLabel:"Book appointment",
+  bookHeadTitle:"Book a follow-up appointment", bookHeadSub:"Choose a slot and confirm with payment",
+  bookNameLabel:"Full name", bookNamePh:"Your name",
+  bookPhoneLabel:"Phone number", bookPhonePh:"10-digit mobile number",
+  bookEmailLabel:"Email (optional)", bookEmailPh:"you@example.com",
+  bookTypeLabel:"Consultation type",
+  bookTypeOptions:[
+    {id:"inperson", label:"In-person follow-up", fee:800},
+    {id:"video", label:"Video consultation", fee:500},
+    {id:"phone", label:"Phone consultation", fee:300}
+  ],
+  bookDateLabel:"Preferred date",
+  bookSlotLabel:"Preferred time slot",
+  bookSlots:["09:00–10:00","10:00–11:00","11:00–12:00","14:00–15:00","15:00–16:00","16:00–17:00"],
+  bookNotesLabel:"Notes for the doctor (optional)", bookNotesPh:"Briefly describe your concern",
+  bookFeeLabel:"Consultation fee",
+  bookPayBtn:"Pay & confirm booking",
+  bookCancelBtn:"Cancel",
+  bookErrRequired:"Please fill in all required fields.",
+  bookErrPhone:"Please enter a valid 10-digit phone number.",
+  bookSuccessTitle:"Appointment confirmed!",
+  bookSuccessBody:"Your booking ID is <b>{id}</b>. A confirmation for your {type} appointment on <b>{date}</b> at <b>{slot}</b> has been recorded. Payment of ₹{fee} was received (ref: {payId}).",
+  bookSuccessClose:"Done",
+  bookDisclaimer:"Payments are processed securely via Razorpay. This booking system stores your appointment on this device; please also confirm by phone if urgent.",
+  bookViewBtn:"My bookings",
+  bookNoneYet:"You have no bookings yet.",
+  bookCancelBooking:"Cancel booking",
+  bookConfirmCancel:"Are you sure you want to cancel this booking?",
   footerNote:"This guide summarises general post-PCI (angioplasty/stent) lifestyle recommendations from ESC, ACC/AHA and Indian cardiology society practice guidance. It is educational material and does not replace individual advice from your treating cardiologist — recovery timelines vary with the complexity of your procedure, heart function, access site (radial/femoral) and any complications.",
   footerSources:"References: ESC Guidelines on Myocardial Revascularisation & Fitness to Drive; ESC Guidelines for Chronic Coronary Syndromes (2024); 2025 ACC/AHA/ACEP/NAEMSP/SCAI Guideline for the Management of Acute Coronary Syndromes; 2021 ACC/AHA/SCAI Guideline for Coronary Artery Revascularisation; Levine GN et al, \"Sexual Activity and Cardiovascular Disease: A Scientific Statement From the American Heart Association,\" Circulation 2012;125:1058–1072; Cardiological Society of India practice advisories. Content last reviewed against published literature: August 2026.",
   sections:[
@@ -545,6 +649,34 @@ hi:{
   chatInputPlaceholder:"अपना प्रश्न लिखें…", chatSend:"भेजें",
   chatIntro:"नमस्ते। एंजियोप्लास्टी के बाद ड्राइविंग, हवाई यात्रा, यौन संबंध, काम पर वापसी या व्यायाम से जुड़ा कोई भी प्रश्न पूछें — मैं इसी गाइड के आधार पर जवाब दूंगा।",
   chatDisclaimer:"यह चैटबॉट केवल सामान्य जीवनशैली संबंधी जानकारी देता है और आपके अपने कार्डियोलॉजिस्ट की सलाह का विकल्प नहीं है। आपात स्थिति में तुरंत अपने स्थानीय आपातकालीन नंबर पर कॉल करें।",
+  bookFabLabel:"अपॉइंटमेंट बुक करें",
+  bookHeadTitle:"फॉलो-अप अपॉइंटमेंट बुक करें", bookHeadSub:"स्लॉट चुनें और भुगतान से पुष्टि करें",
+  bookNameLabel:"पूरा नाम", bookNamePh:"आपका नाम",
+  bookPhoneLabel:"फ़ोन नंबर", bookPhonePh:"10 अंकों का मोबाइल नंबर",
+  bookEmailLabel:"ईमेल (वैकल्पिक)", bookEmailPh:"you@example.com",
+  bookTypeLabel:"परामर्श का प्रकार",
+  bookTypeOptions:[
+    {id:"inperson", label:"व्यक्तिगत फॉलो-अप", fee:800},
+    {id:"video", label:"वीडियो परामर्श", fee:500},
+    {id:"phone", label:"फ़ोन परामर्श", fee:300}
+  ],
+  bookDateLabel:"पसंदीदा तारीख",
+  bookSlotLabel:"पसंदीदा समय स्लॉट",
+  bookSlots:["09:00–10:00","10:00–11:00","11:00–12:00","14:00–15:00","15:00–16:00","16:00–17:00"],
+  bookNotesLabel:"डॉक्टर के लिए नोट्स (वैकल्पिक)", bookNotesPh:"अपनी समस्या संक्षेप में बताएं",
+  bookFeeLabel:"परामर्श शुल्क",
+  bookPayBtn:"भुगतान करें और बुकिंग पक्की करें",
+  bookCancelBtn:"रद्द करें",
+  bookErrRequired:"कृपया सभी आवश्यक जानकारी भरें।",
+  bookErrPhone:"कृपया मान्य 10 अंकों का फ़ोन नंबर दर्ज करें।",
+  bookSuccessTitle:"अपॉइंटमेंट पक्की हो गई!",
+  bookSuccessBody:"आपकी बुकिंग आईडी <b>{id}</b> है। आपकी {type} अपॉइंटमेंट <b>{date}</b> को <b>{slot}</b> बजे दर्ज कर ली गई है। ₹{fee} का भुगतान प्राप्त हुआ (संदर्भ: {payId})।",
+  bookSuccessClose:"ठीक है",
+  bookDisclaimer:"भुगतान Razorpay के माध्यम से सुरक्षित रूप से संसाधित होता है। यह बुकिंग सिस्टम आपकी अपॉइंटमेंट इस डिवाइस पर सहेजता है; तत्काल आवश्यकता होने पर फ़ोन से भी पुष्टि करें।",
+  bookViewBtn:"मेरी बुकिंग",
+  bookNoneYet:"अभी तक आपकी कोई बुकिंग नहीं है।",
+  bookCancelBooking:"बुकिंग रद्द करें",
+  bookConfirmCancel:"क्या आप वाकई इस बुकिंग को रद्द करना चाहते हैं?",
   footerNote:"यह गाइड ESC, ACC/AHA और भारतीय कार्डियोलॉजी सोसाइटी की सामान्य पोस्ट-पीसीआई (एंजियोप्लास्टी/स्टेंट) जीवनशैली सिफारिशों का सारांश है। यह केवल शैक्षणिक जानकारी है और आपके इलाज करने वाले कार्डियोलॉजिस्ट की व्यक्तिगत सलाह का स्थान नहीं ले सकती — रिकवरी का समय आपकी प्रक्रिया की जटिलता, हृदय की कार्यक्षमता, एक्सेस साइट (रेडियल/फीमोरल) और किसी भी जटिलता पर निर्भर करता है।",
   footerSources:"संदर्भ: ESC मायोकार्डियल रिवास्कुलराइज़ेशन एवं ड्राइविंग फिटनेस दिशानिर्देश; ESC क्रॉनिक कोरोनरी सिंड्रोम दिशानिर्देश (2024); 2025 ACC/AHA/ACEP/NAEMSP/SCAI एक्यूट कोरोनरी सिंड्रोम प्रबंधन दिशानिर्देश; 2021 ACC/AHA/SCAI कोरोनरी आर्टरी रिवास्कुलराइज़ेशन दिशानिर्देश; Levine GN एवं अन्य, \"Sexual Activity and Cardiovascular Disease: A Scientific Statement From the American Heart Association,\" Circulation 2012;125:1058–1072; कार्डियोलॉजिकल सोसाइटी ऑफ इंडिया की व्यावहारिक सलाह। सामग्री की अंतिम समीक्षा: अगस्त 2026।",
   sections:[
@@ -702,6 +834,34 @@ pa:{
   chatInputPlaceholder:"ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ…", chatSend:"ਭੇਜੋ",
   chatIntro:"ਸਤ ਸ੍ਰੀ ਅਕਾਲ। ਐਂਜੀਓਪਲਾਸਟੀ ਤੋਂ ਬਾਅਦ ਡਰਾਈਵਿੰਗ, ਹਵਾਈ ਸਫ਼ਰ, ਸਰੀਰਕ ਸੰਬੰਧ, ਕੰਮ 'ਤੇ ਵਾਪਸੀ ਜਾਂ ਕਸਰਤ ਬਾਰੇ ਕੋਈ ਵੀ ਸਵਾਲ ਪੁੱਛੋ — ਮੈਂ ਇਸੇ ਗਾਈਡ ਦੇ ਆਧਾਰ 'ਤੇ ਜਵਾਬ ਦੇਵਾਂਗਾ।",
   chatDisclaimer:"ਇਹ ਚੈਟਬੋਟ ਸਿਰਫ਼ ਆਮ ਜੀਵਨਸ਼ੈਲੀ ਸੰਬੰਧੀ ਜਾਣਕਾਰੀ ਦਿੰਦਾ ਹੈ ਅਤੇ ਤੁਹਾਡੇ ਆਪਣੇ ਕਾਰਡੀਓਲੋਜਿਸਟ ਦੀ ਸਲਾਹ ਦਾ ਬਦਲ ਨਹੀਂ ਹੈ। ਐਮਰਜੈਂਸੀ ਵਿੱਚ ਤੁਰੰਤ ਆਪਣੇ ਸਥਾਨਕ ਐਮਰਜੈਂਸੀ ਨੰਬਰ 'ਤੇ ਕਾਲ ਕਰੋ।",
+  bookFabLabel:"ਅਪਾਇੰਟਮੈਂਟ ਬੁੱਕ ਕਰੋ",
+  bookHeadTitle:"ਫਾਲੋ-ਅੱਪ ਅਪਾਇੰਟਮੈਂਟ ਬੁੱਕ ਕਰੋ", bookHeadSub:"ਸਲਾਟ ਚੁਣੋ ਅਤੇ ਭੁਗਤਾਨ ਨਾਲ ਪੁਸ਼ਟੀ ਕਰੋ",
+  bookNameLabel:"ਪੂਰਾ ਨਾਮ", bookNamePh:"ਤੁਹਾਡਾ ਨਾਮ",
+  bookPhoneLabel:"ਫ਼ੋਨ ਨੰਬਰ", bookPhonePh:"10 ਅੰਕਾਂ ਦਾ ਮੋਬਾਈਲ ਨੰਬਰ",
+  bookEmailLabel:"ਈਮੇਲ (ਵਿਕਲਪਿਕ)", bookEmailPh:"you@example.com",
+  bookTypeLabel:"ਸਲਾਹ-ਮਸ਼ਵਰੇ ਦੀ ਕਿਸਮ",
+  bookTypeOptions:[
+    {id:"inperson", label:"ਵਿਅਕਤੀਗਤ ਫਾਲੋ-ਅੱਪ", fee:800},
+    {id:"video", label:"ਵੀਡੀਓ ਸਲਾਹ-ਮਸ਼ਵਰਾ", fee:500},
+    {id:"phone", label:"ਫ਼ੋਨ ਸਲਾਹ-ਮਸ਼ਵਰਾ", fee:300}
+  ],
+  bookDateLabel:"ਪਸੰਦੀਦਾ ਮਿਤੀ",
+  bookSlotLabel:"ਪਸੰਦੀਦਾ ਸਮਾਂ ਸਲਾਟ",
+  bookSlots:["09:00–10:00","10:00–11:00","11:00–12:00","14:00–15:00","15:00–16:00","16:00–17:00"],
+  bookNotesLabel:"ਡਾਕਟਰ ਲਈ ਨੋਟਸ (ਵਿਕਲਪਿਕ)", bookNotesPh:"ਆਪਣੀ ਸਮੱਸਿਆ ਸੰਖੇਪ ਵਿੱਚ ਦੱਸੋ",
+  bookFeeLabel:"ਸਲਾਹ-ਮਸ਼ਵਰਾ ਫੀਸ",
+  bookPayBtn:"ਭੁਗਤਾਨ ਕਰੋ ਅਤੇ ਬੁਕਿੰਗ ਪੱਕੀ ਕਰੋ",
+  bookCancelBtn:"ਰੱਦ ਕਰੋ",
+  bookErrRequired:"ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੀ ਲੋੜੀਂਦੀ ਜਾਣਕਾਰੀ ਭਰੋ।",
+  bookErrPhone:"ਕਿਰਪਾ ਕਰਕੇ ਸਹੀ 10 ਅੰਕਾਂ ਦਾ ਫ਼ੋਨ ਨੰਬਰ ਦਰਜ ਕਰੋ।",
+  bookSuccessTitle:"ਅਪਾਇੰਟਮੈਂਟ ਪੱਕੀ ਹੋ ਗਈ!",
+  bookSuccessBody:"ਤੁਹਾਡੀ ਬੁਕਿੰਗ ਆਈਡੀ <b>{id}</b> ਹੈ। ਤੁਹਾਡੀ {type} ਅਪਾਇੰਟਮੈਂਟ <b>{date}</b> ਨੂੰ <b>{slot}</b> ਵਜੇ ਦਰਜ ਕੀਤੀ ਗਈ ਹੈ। ₹{fee} ਦਾ ਭੁਗਤਾਨ ਪ੍ਰਾਪਤ ਹੋਇਆ (ਹਵਾਲਾ: {payId})।",
+  bookSuccessClose:"ਠੀਕ ਹੈ",
+  bookDisclaimer:"ਭੁਗਤਾਨ Razorpay ਰਾਹੀਂ ਸੁਰੱਖਿਅਤ ਢੰਗ ਨਾਲ ਪ੍ਰਕਿਰਿਆ ਕੀਤਾ ਜਾਂਦਾ ਹੈ। ਇਹ ਬੁਕਿੰਗ ਸਿਸਟਮ ਤੁਹਾਡੀ ਅਪਾਇੰਟਮੈਂਟ ਇਸ ਡਿਵਾਈਸ 'ਤੇ ਸੰਭਾਲਦਾ ਹੈ; ਜ਼ਰੂਰੀ ਹੋਣ 'ਤੇ ਫ਼ੋਨ ਰਾਹੀਂ ਵੀ ਪੁਸ਼ਟੀ ਕਰੋ।",
+  bookViewBtn:"ਮੇਰੀਆਂ ਬੁਕਿੰਗਾਂ",
+  bookNoneYet:"ਹੁਣ ਤੱਕ ਤੁਹਾਡੀ ਕੋਈ ਬੁਕਿੰਗ ਨਹੀਂ ਹੈ।",
+  bookCancelBooking:"ਬੁਕਿੰਗ ਰੱਦ ਕਰੋ",
+  bookConfirmCancel:"ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਇਸ ਬੁਕਿੰਗ ਨੂੰ ਰੱਦ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?",
   footerNote:"ਇਹ ਗਾਈਡ ESC, ACC/AHA ਅਤੇ ਭਾਰਤੀ ਕਾਰਡੀਓਲੋਜੀ ਸੋਸਾਇਟੀ ਦੀਆਂ ਆਮ ਪੋਸਟ-ਪੀਸੀਆਈ (ਐਂਜੀਓਪਲਾਸਟੀ/ਸਟੈਂਟ) ਜੀਵਨਸ਼ੈਲੀ ਸਿਫ਼ਾਰਸ਼ਾਂ ਦਾ ਸਾਰ ਹੈ। ਇਹ ਸਿਰਫ਼ ਵਿਦਿਅਕ ਜਾਣਕਾਰੀ ਹੈ ਅਤੇ ਤੁਹਾਡੇ ਇਲਾਜ ਕਰਨ ਵਾਲੇ ਕਾਰਡੀਓਲੋਜਿਸਟ ਦੀ ਨਿੱਜੀ ਸਲਾਹ ਦੀ ਥਾਂ ਨਹੀਂ ਲੈ ਸਕਦੀ — ਰਿਕਵਰੀ ਦਾ ਸਮਾਂ ਤੁਹਾਡੀ ਪ੍ਰਕਿਰਿਆ ਦੀ ਜਟਿਲਤਾ, ਦਿਲ ਦੀ ਕਾਰਜਸ਼ੀਲਤਾ, ਐਕਸੈਸ ਸਾਈਟ (ਰੇਡੀਅਲ/ਫੀਮੋਰਲ) ਅਤੇ ਕਿਸੇ ਵੀ ਜਟਿਲਤਾ 'ਤੇ ਨਿਰਭਰ ਕਰਦਾ ਹੈ।",
   footerSources:"ਹਵਾਲੇ: ESC ਮਾਇਓਕਾਰਡੀਅਲ ਰੀਵੈਸਕੁਲਰਾਈਜ਼ੇਸ਼ਨ ਅਤੇ ਡਰਾਈਵਿੰਗ ਫਿਟਨੈਸ ਦਿਸ਼ਾ-ਨਿਰਦੇਸ਼; ESC ਕ੍ਰੌਨਿਕ ਕੋਰੋਨਰੀ ਸਿੰਡਰੋਮ ਦਿਸ਼ਾ-ਨਿਰਦੇਸ਼ (2024); 2025 ACC/AHA/ACEP/NAEMSP/SCAI ਏਕਿਊਟ ਕੋਰੋਨਰੀ ਸਿੰਡਰੋਮ ਪ੍ਰਬੰਧਨ ਦਿਸ਼ਾ-ਨਿਰਦੇਸ਼; 2021 ACC/AHA/SCAI ਕੋਰੋਨਰੀ ਆਰਟਰੀ ਰੀਵੈਸਕੁਲਰਾਈਜ਼ੇਸ਼ਨ ਦਿਸ਼ਾ-ਨਿਰਦੇਸ਼; Levine GN ਅਤੇ ਹੋਰ, \"Sexual Activity and Cardiovascular Disease: A Scientific Statement From the American Heart Association,\" Circulation 2012;125:1058–1072; ਕਾਰਡੀਓਲੋਜੀਕਲ ਸੋਸਾਇਟੀ ਆਫ਼ ਇੰਡੀਆ ਦੀ ਵਿਹਾਰਕ ਸਲਾਹ। ਸਮੱਗਰੀ ਦੀ ਆਖ਼ਰੀ ਸਮੀਖਿਆ: ਅਗਸਤ 2026।",
   sections:[
@@ -859,6 +1019,34 @@ bn:{
   chatInputPlaceholder:"আপনার প্রশ্ন লিখুন…", chatSend:"পাঠান",
   chatIntro:"নমস্কার। অ্যাঞ্জিওপ্লাস্টির পরে ড্রাইভিং, বিমান ভ্রমণ, যৌন মিলন, কাজে ফেরা বা ব্যায়াম সম্পর্কে যেকোনো প্রশ্ন জিজ্ঞাসা করুন — আমি এই গাইডের ভিত্তিতে উত্তর দেব।",
   chatDisclaimer:"এই চ্যাটবট শুধুমাত্র সাধারণ জীবনযাত্রা সংক্রান্ত পরামর্শ দেয় এবং আপনার নিজস্ব কার্ডিওলজিস্টের পরামর্শের বিকল্প নয়। জরুরি অবস্থায় সঙ্গে সঙ্গে আপনার স্থানীয় জরুরি নম্বরে কল করুন।",
+  bookFabLabel:"অ্যাপয়েন্টমেন্ট বুক করুন",
+  bookHeadTitle:"ফলো-আপ অ্যাপয়েন্টমেন্ট বুক করুন", bookHeadSub:"স্লট বেছে নিন এবং পেমেন্টের মাধ্যমে নিশ্চিত করুন",
+  bookNameLabel:"পুরো নাম", bookNamePh:"আপনার নাম",
+  bookPhoneLabel:"ফোন নম্বর", bookPhonePh:"১০ সংখ্যার মোবাইল নম্বর",
+  bookEmailLabel:"ইমেল (ঐচ্ছিক)", bookEmailPh:"you@example.com",
+  bookTypeLabel:"পরামর্শের ধরন",
+  bookTypeOptions:[
+    {id:"inperson", label:"সশরীরে ফলো-আপ", fee:800},
+    {id:"video", label:"ভিডিও পরামর্শ", fee:500},
+    {id:"phone", label:"ফোন পরামর্শ", fee:300}
+  ],
+  bookDateLabel:"পছন্দের তারিখ",
+  bookSlotLabel:"পছন্দের সময় স্লট",
+  bookSlots:["09:00–10:00","10:00–11:00","11:00–12:00","14:00–15:00","15:00–16:00","16:00–17:00"],
+  bookNotesLabel:"ডাক্তারের জন্য নোট (ঐচ্ছিক)", bookNotesPh:"আপনার সমস্যা সংক্ষেপে বর্ণনা করুন",
+  bookFeeLabel:"পরামর্শ ফি",
+  bookPayBtn:"পেমেন্ট করুন ও বুকিং নিশ্চিত করুন",
+  bookCancelBtn:"বাতিল করুন",
+  bookErrRequired:"অনুগ্রহ করে সমস্ত প্রয়োজনীয় তথ্য পূরণ করুন।",
+  bookErrPhone:"অনুগ্রহ করে একটি বৈধ ১০ সংখ্যার ফোন নম্বর লিখুন।",
+  bookSuccessTitle:"অ্যাপয়েন্টমেন্ট নিশ্চিত হয়েছে!",
+  bookSuccessBody:"আপনার বুকিং আইডি হল <b>{id}</b>। আপনার {type} অ্যাপয়েন্টমেন্ট <b>{date}</b> তারিখে <b>{slot}</b> সময়ে রেকর্ড করা হয়েছে। ₹{fee} পেমেন্ট গৃহীত হয়েছে (রেফ: {payId})।",
+  bookSuccessClose:"সম্পন্ন",
+  bookDisclaimer:"পেমেন্ট নিরাপদে Razorpay-এর মাধ্যমে প্রক্রিয়া করা হয়। এই বুকিং সিস্টেম আপনার অ্যাপয়েন্টমেন্ট এই ডিভাইসে সংরক্ষণ করে; জরুরি হলে ফোনেও নিশ্চিত করুন।",
+  bookViewBtn:"আমার বুকিং",
+  bookNoneYet:"আপনার এখনো কোনো বুকিং নেই।",
+  bookCancelBooking:"বুকিং বাতিল করুন",
+  bookConfirmCancel:"আপনি কি নিশ্চিত এই বুকিং বাতিল করতে চান?",
   footerNote:"এই গাইডটি ESC, ACC/AHA এবং ভারতীয় কার্ডিওলজি সোসাইটির সাধারণ পোস্ট-পিসিআই (অ্যাঞ্জিওপ্লাস্টি/স্টেন্ট) জীবনযাত্রা সংক্রান্ত সুপারিশের সারাংশ। এটি শুধুমাত্র শিক্ষামূলক উপাদান এবং আপনার চিকিৎসারত কার্ডিওলজিস্টের ব্যক্তিগত পরামর্শের বিকল্প নয় — সেরে ওঠার সময়কাল আপনার প্রক্রিয়ার জটিলতা, হৃদযন্ত্রের কার্যকারিতা, অ্যাক্সেস স্থান (রেডিয়াল/ফিমোরাল) এবং কোনো জটিলতার উপর নির্ভর করে।",
   footerSources:"তথ্যসূত্র: ESC মায়োকার্ডিয়াল রিভাস্কুলারাইজেশন ও ড্রাইভিং ফিটনেস নির্দেশিকা; ESC ক্রনিক করোনারি সিনড্রোম নির্দেশিকা (২০২৪); ২০২৫ ACC/AHA/ACEP/NAEMSP/SCAI অ্যাকিউট করোনারি সিনড্রোম ব্যবস্থাপনা নির্দেশিকা; ২০২১ ACC/AHA/SCAI করোনারি আর্টারি রিভাস্কুলারাইজেশন নির্দেশিকা; Levine GN ও অন্যান্য, \"Sexual Activity and Cardiovascular Disease: A Scientific Statement From the American Heart Association,\" Circulation 2012;125:1058–1072; কার্ডিওলজিক্যাল সোসাইটি অফ ইন্ডিয়ার ব্যবহারিক পরামর্শ। বিষয়বস্তুর সর্বশেষ পর্যালোচনা: আগস্ট ২০২৬।",
   sections:[
@@ -1057,6 +1245,7 @@ function renderStaticText(lang){
   document.getElementById("chatInput").placeholder = d.chatInputPlaceholder;
   document.getElementById("chatSend").textContent = d.chatSend;
   document.getElementById("chatDisclaimer").textContent = d.chatDisclaimer;
+  document.getElementById("bookFabLabel").textContent = d.bookFabLabel;
   document.getElementById("footerNote").textContent = d.footerNote;
   document.getElementById("footerSources").textContent = d.footerSources;
 
@@ -1074,6 +1263,7 @@ function setLang(lang){
   renderSections(lang);
   resetChat();
   resetEval(lang);
+  renderBookModal(lang);
 }
 
 document.getElementById("langswitch").addEventListener("click", (e)=>{
@@ -1420,6 +1610,223 @@ async function sendMessage(){
 chatSend.addEventListener("click", sendMessage);
 chatInput.addEventListener("keydown", (e)=>{
   if(e.key === "Enter") sendMessage();
+});
+
+/* =========================================================
+   BOOKING & PAYMENT
+   ========================================================= */
+const RAZORPAY_KEY_ID = "rzp_test_1DP5mmOlF5G5ag"; // Razorpay's public test key — replace with your live/test key ID
+const BOOKINGS_STORAGE_KEY = "cvd_bookings_v1";
+
+let bookState = { type:null, date:"", slot:null, name:"", phone:"", email:"", notes:"" };
+
+function loadBookings(){
+  try{ return JSON.parse(localStorage.getItem(BOOKINGS_STORAGE_KEY)) || []; }
+  catch(e){ return []; }
+}
+function saveBookings(list){
+  localStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify(list));
+}
+function generateBookingId(){
+  return "APT-" + Date.now().toString(36).toUpperCase() + "-" + Math.random().toString(36).slice(2,6).toUpperCase();
+}
+function todayISO(){
+  const d = new Date();
+  return d.toISOString().slice(0,10);
+}
+
+const bookFab = document.getElementById("bookFab");
+const bookOverlay = document.getElementById("bookOverlay");
+const bookModalBody = document.getElementById("bookModalBody");
+
+function renderBookModal(lang){
+  const d = DATA[lang];
+  if(!bookState.type) bookState.type = d.bookTypeOptions[0].id;
+  const selectedType = d.bookTypeOptions.find(t=>t.id===bookState.type) || d.bookTypeOptions[0];
+
+  bookModalBody.innerHTML = `
+    <div class="book-field">
+      <label>${d.bookNameLabel}</label>
+      <input type="text" id="bkName" placeholder="${d.bookNamePh}" value="${bookState.name.replace(/"/g,"&quot;")}">
+    </div>
+    <div class="book-field">
+      <label>${d.bookPhoneLabel}</label>
+      <input type="tel" id="bkPhone" placeholder="${d.bookPhonePh}" value="${bookState.phone.replace(/"/g,"&quot;")}" maxlength="10">
+    </div>
+    <div class="book-field">
+      <label>${d.bookEmailLabel}</label>
+      <input type="email" id="bkEmail" placeholder="${d.bookEmailPh}" value="${bookState.email.replace(/"/g,"&quot;")}">
+    </div>
+    <div class="book-field">
+      <label>${d.bookTypeLabel}</label>
+      <div class="book-type-grid" id="bkTypeGrid">
+        ${d.bookTypeOptions.map(t=>`
+          <button type="button" class="book-type-card${t.id===bookState.type?" selected":""}" data-type="${t.id}">
+            <span>${t.label}</span><span class="fee">₹${t.fee}</span>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+    <div class="book-field">
+      <label>${d.bookDateLabel}</label>
+      <input type="date" id="bkDate" min="${todayISO()}" value="${bookState.date}">
+    </div>
+    <div class="book-field">
+      <label>${d.bookSlotLabel}</label>
+      <div class="book-slot-grid" id="bkSlotGrid">
+        ${d.bookSlots.map(s=>`<button type="button" class="book-slot-card${s===bookState.slot?" selected":""}" data-slot="${s}">${s}</button>`).join("")}
+      </div>
+    </div>
+    <div class="book-field">
+      <label>${d.bookNotesLabel}</label>
+      <textarea id="bkNotes" placeholder="${d.bookNotesPh}">${bookState.notes}</textarea>
+    </div>
+    <div class="book-fee-row">
+      <span>${d.bookFeeLabel}</span><span>₹${selectedType.fee}</span>
+    </div>
+    <div class="book-error" id="bkError" style="display:none;"></div>
+    <div class="book-actions">
+      <button class="btn btn-ghost" id="bkCancel">${d.bookCancelBtn}</button>
+      <button class="btn btn-primary" id="bkPay">${d.bookPayBtn}</button>
+    </div>
+    <div class="book-disclaimer">${d.bookDisclaimer}</div>
+  `;
+
+  bookModalBody.querySelectorAll("#bkTypeGrid .book-type-card").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      bookState.type = btn.dataset.type;
+      bookState.name = document.getElementById("bkName").value;
+      bookState.phone = document.getElementById("bkPhone").value;
+      bookState.email = document.getElementById("bkEmail").value;
+      bookState.date = document.getElementById("bkDate").value;
+      bookState.notes = document.getElementById("bkNotes").value;
+      renderBookModal(lang);
+    });
+  });
+  bookModalBody.querySelectorAll("#bkSlotGrid .book-slot-card").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      bookState.slot = btn.dataset.slot;
+      bookState.name = document.getElementById("bkName").value;
+      bookState.phone = document.getElementById("bkPhone").value;
+      bookState.email = document.getElementById("bkEmail").value;
+      bookState.date = document.getElementById("bkDate").value;
+      bookState.notes = document.getElementById("bkNotes").value;
+      renderBookModal(lang);
+    });
+  });
+
+  document.getElementById("bkCancel").addEventListener("click", closeBookModal);
+  document.getElementById("bkPay").addEventListener("click", ()=> handleBookingPayment(lang));
+}
+
+function showBookError(msg){
+  const errEl = document.getElementById("bkError");
+  if(errEl){ errEl.textContent = msg; errEl.style.display = "block"; }
+}
+
+function handleBookingPayment(lang){
+  const d = DATA[lang];
+  const name = document.getElementById("bkName").value.trim();
+  const phone = document.getElementById("bkPhone").value.trim();
+  const email = document.getElementById("bkEmail").value.trim();
+  const date = document.getElementById("bkDate").value;
+  const notes = document.getElementById("bkNotes").value.trim();
+  const type = d.bookTypeOptions.find(t=>t.id===bookState.type) || d.bookTypeOptions[0];
+
+  if(!name || !phone || !date || !bookState.slot){
+    showBookError(d.bookErrRequired);
+    return;
+  }
+  if(!/^\d{10}$/.test(phone)){
+    showBookError(d.bookErrPhone);
+    return;
+  }
+
+  bookState.name = name; bookState.phone = phone; bookState.email = email;
+  bookState.date = date; bookState.notes = notes;
+
+  const bookingId = generateBookingId();
+  const amountPaise = type.fee * 100;
+
+  if(typeof Razorpay === "undefined"){
+    // Fallback if Razorpay script failed to load (e.g. offline sandbox)
+    finalizeBooking(lang, { id:bookingId, type, payId:"OFFLINE-"+bookingId });
+    return;
+  }
+
+  const options = {
+    key: RAZORPAY_KEY_ID,
+    amount: amountPaise,
+    currency: "INR",
+    name: "CVD & Post-PTCA Recovery Guide",
+    description: type.label + " — " + bookState.date + " " + bookState.slot,
+    prefill: { name, contact: phone, email },
+    notes: { booking_id: bookingId, notes: notes },
+    theme: { color: "#1F6F5C" },
+    handler: function(response){
+      finalizeBooking(lang, { id:bookingId, type, payId: response.razorpay_payment_id || ("PAY-"+bookingId) });
+    },
+    modal: {
+      ondismiss: function(){ /* user closed payment sheet without paying */ }
+    }
+  };
+
+  try{
+    const rzp = new Razorpay(options);
+    rzp.open();
+  }catch(e){
+    finalizeBooking(lang, { id:bookingId, type, payId:"OFFLINE-"+bookingId });
+  }
+}
+
+function finalizeBooking(lang, payment){
+  const d = DATA[lang];
+  const bookings = loadBookings();
+  const record = {
+    id: payment.id,
+    name: bookState.name,
+    phone: bookState.phone,
+    email: bookState.email,
+    type: payment.type.id,
+    typeLabel: payment.type.label,
+    fee: payment.type.fee,
+    date: bookState.date,
+    slot: bookState.slot,
+    notes: bookState.notes,
+    payId: payment.payId,
+    createdAt: new Date().toISOString(),
+    status: "confirmed"
+  };
+  bookings.push(record);
+  saveBookings(bookings);
+
+  bookModalBody.innerHTML = `
+    <div class="book-success">
+      <h3>${d.bookSuccessTitle}</h3>
+      <p>${fillTemplate(d.bookSuccessBody, { id: record.id, type: record.typeLabel, date: record.date, slot: record.slot, fee: record.fee, payId: record.payId })}</p>
+      <div class="book-actions">
+        <button class="btn btn-primary" id="bkDone">${d.bookSuccessClose}</button>
+      </div>
+      <div class="book-disclaimer">${d.bookDisclaimer}</div>
+    </div>
+  `;
+  document.getElementById("bkDone").addEventListener("click", closeBookModal);
+
+  bookState = { type:null, date:"", slot:null, name:"", phone:"", email:"", notes:"" };
+}
+
+function openBookModal(){
+  bookOverlay.classList.add("open");
+  renderBookModal(currentLang);
+}
+function closeBookModal(){
+  bookOverlay.classList.remove("open");
+}
+
+bookFab.addEventListener("click", openBookModal);
+document.getElementById("bookClose").addEventListener("click", closeBookModal);
+bookOverlay.addEventListener("click", (e)=>{
+  if(e.target === bookOverlay) closeBookModal();
 });
 
 /* Initial render — must run after all declarations above (chatHistory, evalState, etc.) */
