@@ -251,6 +251,11 @@
   .book-success h3{font-size:16px;margin-bottom:8px;}
   .book-success p{font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
   .book-disclaimer{font-size:11px;color:var(--ink-soft);margin-top:12px;}
+  .btn-whatsapp{background:#25D366;color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;gap:7px;text-decoration:none;cursor:pointer;}
+  .btn-whatsapp:hover{background:#1ebe5d;}
+  .book-wa-divider{text-align:center;font-size:12px;color:var(--ink-soft);margin:10px 0;position:relative;}
+  .book-wa-divider::before,.book-wa-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--line);}
+  .book-wa-divider::before{left:0;} .book-wa-divider::after{right:0;}
   .book-list{list-style:none;margin:0;padding:0;}
   .book-list li{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:13px;}
   .book-list .b-top{display:flex;justify-content:space-between;font-weight:700;}
@@ -481,6 +486,8 @@ en:{
   bookNotesLabel:"Notes for the doctor (optional)", bookNotesPh:"Briefly describe your concern",
   bookFeeLabel:"Consultation fee",
   bookPayBtn:"Pay & confirm booking",
+  bookWaBtn:"Book via WhatsApp",
+  bookWaSuccess:"Confirm on WhatsApp",
   bookCancelBtn:"Cancel",
   bookErrRequired:"Please fill in all required fields.",
   bookErrPhone:"Please enter a valid 10-digit phone number.",
@@ -666,6 +673,8 @@ hi:{
   bookNotesLabel:"डॉक्टर के लिए नोट्स (वैकल्पिक)", bookNotesPh:"अपनी समस्या संक्षेप में बताएं",
   bookFeeLabel:"परामर्श शुल्क",
   bookPayBtn:"भुगतान करें और बुकिंग पक्की करें",
+  bookWaBtn:"WhatsApp से बुक करें",
+  bookWaSuccess:"WhatsApp पर पुष्टि करें",
   bookCancelBtn:"रद्द करें",
   bookErrRequired:"कृपया सभी आवश्यक जानकारी भरें।",
   bookErrPhone:"कृपया मान्य 10 अंकों का फ़ोन नंबर दर्ज करें।",
@@ -851,6 +860,8 @@ pa:{
   bookNotesLabel:"ਡਾਕਟਰ ਲਈ ਨੋਟਸ (ਵਿਕਲਪਿਕ)", bookNotesPh:"ਆਪਣੀ ਸਮੱਸਿਆ ਸੰਖੇਪ ਵਿੱਚ ਦੱਸੋ",
   bookFeeLabel:"ਸਲਾਹ-ਮਸ਼ਵਰਾ ਫੀਸ",
   bookPayBtn:"ਭੁਗਤਾਨ ਕਰੋ ਅਤੇ ਬੁਕਿੰਗ ਪੱਕੀ ਕਰੋ",
+  bookWaBtn:"WhatsApp ਰਾਹੀਂ ਬੁੱਕ ਕਰੋ",
+  bookWaSuccess:"WhatsApp 'ਤੇ ਪੁਸ਼ਟੀ ਕਰੋ",
   bookCancelBtn:"ਰੱਦ ਕਰੋ",
   bookErrRequired:"ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੀ ਲੋੜੀਂਦੀ ਜਾਣਕਾਰੀ ਭਰੋ।",
   bookErrPhone:"ਕਿਰਪਾ ਕਰਕੇ ਸਹੀ 10 ਅੰਕਾਂ ਦਾ ਫ਼ੋਨ ਨੰਬਰ ਦਰਜ ਕਰੋ।",
@@ -1036,6 +1047,8 @@ bn:{
   bookNotesLabel:"ডাক্তারের জন্য নোট (ঐচ্ছিক)", bookNotesPh:"আপনার সমস্যা সংক্ষেপে বর্ণনা করুন",
   bookFeeLabel:"পরামর্শ ফি",
   bookPayBtn:"পেমেন্ট করুন ও বুকিং নিশ্চিত করুন",
+  bookWaBtn:"WhatsApp-এ বুক করুন",
+  bookWaSuccess:"WhatsApp-এ নিশ্চিত করুন",
   bookCancelBtn:"বাতিল করুন",
   bookErrRequired:"অনুগ্রহ করে সমস্ত প্রয়োজনীয় তথ্য পূরণ করুন।",
   bookErrPhone:"অনুগ্রহ করে একটি বৈধ ১০ সংখ্যার ফোন নম্বর লিখুন।",
@@ -1689,6 +1702,13 @@ function renderBookModal(lang){
       <button class="btn btn-ghost" id="bkCancel">${d.bookCancelBtn}</button>
       <button class="btn btn-primary" id="bkPay">${d.bookPayBtn}</button>
     </div>
+    <div class="book-wa-divider">or</div>
+    <div style="display:flex;justify-content:center;">
+      <button class="btn-whatsapp" id="bkWa">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.555 4.118 1.527 5.847L.057 23.5l5.79-1.517A11.935 11.935 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.899 0-3.67-.497-5.2-1.37l-.373-.22-3.437.9.92-3.352-.243-.386A9.94 9.94 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        ${d.bookWaBtn}
+      </button>
+    </div>
     <div class="book-disclaimer">${d.bookDisclaimer}</div>
   `;
 
@@ -1717,11 +1737,44 @@ function renderBookModal(lang){
 
   document.getElementById("bkCancel").addEventListener("click", closeBookModal);
   document.getElementById("bkPay").addEventListener("click", ()=> handleBookingPayment(lang));
+  document.getElementById("bkWa").addEventListener("click", ()=> handleWhatsAppBooking(lang));
 }
 
 function showBookError(msg){
   const errEl = document.getElementById("bkError");
   if(errEl){ errEl.textContent = msg; errEl.style.display = "block"; }
+}
+
+const WA_NUMBER = "919560401055";
+
+function buildWaUrl(msg){ return "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(msg); }
+
+function handleWhatsAppBooking(lang){
+  const d = DATA[lang];
+  const name = document.getElementById("bkName").value.trim();
+  const phone = document.getElementById("bkPhone").value.trim();
+  const date = document.getElementById("bkDate").value;
+  const notes = document.getElementById("bkNotes").value.trim();
+  const type = d.bookTypeOptions.find(t=>t.id===bookState.type) || d.bookTypeOptions[0];
+
+  if(!name || !phone || !date || !bookState.slot){
+    showBookError(d.bookErrRequired);
+    return;
+  }
+  if(!/^\d{10}$/.test(phone)){
+    showBookError(d.bookErrPhone);
+    return;
+  }
+
+  const msg = "Hello, I would like to book a " + type.label + " appointment.\n"
+    + "Name: " + name + "\n"
+    + "Phone: " + phone + "\n"
+    + "Date: " + date + "\n"
+    + "Time: " + bookState.slot + "\n"
+    + (notes ? "Notes: " + notes + "\n" : "")
+    + "Fee: ₹" + type.fee;
+
+  window.open(buildWaUrl(msg), "_blank", "noopener");
 }
 
 function handleBookingPayment(lang){
@@ -1806,6 +1859,13 @@ function finalizeBooking(lang, payment){
       <p>${fillTemplate(d.bookSuccessBody, { id: record.id, type: record.typeLabel, date: record.date, slot: record.slot, fee: record.fee, payId: record.payId })}</p>
       <div class="book-actions">
         <button class="btn btn-primary" id="bkDone">${d.bookSuccessClose}</button>
+      </div>
+      <div class="book-wa-divider">or</div>
+      <div style="display:flex;justify-content:center;">
+        <a class="btn-whatsapp" href="${buildWaUrl("Hi, I have a confirmed booking (ID: " + record.id + ") for " + record.typeLabel + " on " + record.date + " at " + record.slot + ". Please confirm.")}" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.555 4.118 1.527 5.847L.057 23.5l5.79-1.517A11.935 11.935 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.899 0-3.67-.497-5.2-1.37l-.373-.22-3.437.9.92-3.352-.243-.386A9.94 9.94 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          ${d.bookWaSuccess}
+        </a>
       </div>
       <div class="book-disclaimer">${d.bookDisclaimer}</div>
     </div>
